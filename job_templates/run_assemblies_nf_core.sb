@@ -1,0 +1,39 @@
+#!/bin/bash --login
+
+#SBATCH --time=24:00:00
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=4G
+#SBATCH --job-name transcriptome
+#SBATCH -o transcriptome.out
+#SBATCH --array=1-57%25
+
+module purge
+ml Nextflow/24.10.2
+
+cd /mnt/scratch/lotrecks/nextflow_runs
+
+DATADIR=/mnt/research/Walker_Lab_Research/Serena_project_data/selection-under-heat_data/sra_study_info/samplesheets
+
+readarray -t files <${DATADIR}/file_list
+
+FILENAME=$(basename ${files[$SLURM_ARRAY_TASK_ID-1]})
+SRR="${FILENAME%%_*}"
+
+# Make a directory to run the run from and move to it
+mkdir ${SRR}
+cd ${SRR}
+
+# Also make a subdir for the outputs
+OUTDIR=/mnt/research/Walker_Lab_Research/Serena_project_data/selection-under-heat_data/nf_core_output/${SRR}
+mkdir ${OUTDIR}
+
+nextflow pull nf-core/denovotranscript
+
+nextflow run nf-core/denovotranscript \
+	-r 1.2.1 \
+	-profile singularity \
+	--input ${DATADIR}/${files[$SLURM_ARRAY_TASK_ID-1]} \
+	--outdir ${OUTDIR} \
+	-work-dir . \
+        -c /mnt/home/lotrecks/WalkerLab/selection-under-heat/shell_scripts/slurm.config.sh \
+	-resume

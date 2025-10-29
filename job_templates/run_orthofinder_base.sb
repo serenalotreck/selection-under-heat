@@ -1,0 +1,11 @@
+#!/bin/bash --login
+
+#SBATCH --time=168:00:00
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=200G
+#SBATCH --job-name parallel_ortho_base
+#SBATCH -o parallel_ortho_base.out
+
+conda activate omics
+
+orthofinder -o /mnt/research/Walker_Lab_Research/Serena_project_data/selection-under-heat_data/orthofinder/parallel_ortho_base -f /mnt/research/Walker_Lab_Research/Serena_project_data/selection-under-heat_data/orthofinder/base_set

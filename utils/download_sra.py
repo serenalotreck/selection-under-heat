@@ -26,7 +26,7 @@ def main(prefetch_path, accession_df, temp_loc, outpath):
     # Download
     print('Downloading...')
     for sra_id in tqdm(runs_to_download):
-        fastq_dump = "fasterq-dump --outdir " + outpath + " -t " + temp_loc + prefetch_path + "/" + sra_id
+        fastq_dump = "fasterq-dump --outdir " + outpath + " --split-files -t " + temp_loc + ' ' + prefetch_path + "/" + sra_id + "/" + sra_id
         subprocess.call(fastq_dump, shell=True)
 
     print('\nDone!')
