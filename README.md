@@ -48,4 +48,6 @@ done
 ## Orthofinder
 Finally, to identify the photorespiration genes, we need to run the [Orthofinder tool](https://github.com/OrthoFinder/OrthoFinder) on our obtained protein sequences. As [described in the Orthofinder docs](https://github.com/OrthoFinder/OrthoFinder?tab=readme-ov-file#advanced-usage---scaling-to-thousands-of-species), when running Orthofinder with more more than 100 species, there is a specific implementation designed to make the runs more efficient. This involves a run with a 64-species "base set", followed by a run that adds any additional species to the core run.
 
+We cleaned the ID/description fields and the filenames with the code in `notebooks/header_cleaning.ipynb` before running Orthofinder, as it uses those fields in the output.
+
 As the Orthofinder developers advise making the 64 species base set encompass as much phylogenetic diversity as possible, we randomly selected 64 of the Phytozome genomes to serve as  the base set, and added the rest of the genomes and the transcriptomes in the addition. The job submission scripts used to run these processes are located in `job_templates`.
